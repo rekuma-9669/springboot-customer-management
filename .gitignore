@@ -1,5 +1,6 @@
 target/
-node_modules/
 *.log
-*.class
-*.jar
+.classpath
+.project
+.settings/
+bin/
