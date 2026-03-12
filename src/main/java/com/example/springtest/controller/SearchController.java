@@ -253,13 +253,13 @@ public class SearchController {
      * @throws SQLException 顧客情報取得時にエラーが発生した場合
      */
 
-    @GetMapping("/customers/{id:\\d+}/delete")
-    public String showDeleteConfirm(@PathVariable int id, Model model){
-
-        CustomerDetail detail = searchService.findCustomerDetailById(id);
-        model.addAttribute("detail", detail);
-        return "delete-confirm";
-    }
+//    @GetMapping("/customers/{id:\\d+}/delete")
+//    public String showDeleteConfirm(@PathVariable int id, Model model){
+//
+//        CustomerDetail detail = searchService.findCustomerDetailById(id);
+//        model.addAttribute("detail", detail);
+//        return "delete-confirm";
+//    }
 
     /**
      * 顧客を停止する。
