@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.springtest.mapper.CustomerMapper">
+
+	<select id="findAllCountries" resultType="string">
+        <![CDATA[
+        SELECT country
+        FROM sakila.country
+        ORDER BY country
+        ]]>
+	</select>
+
+	<select id="findAllCities"
+		resultType="com.example.springtest.dto.CityOption">
+        <![CDATA[
+        SELECT
+          ci.city_id AS cityId,
+          ci.city AS cityName,
+          co.country AS countryName
+        FROM sakila.city ci
+        JOIN sakila.country co ON ci.country_id = co.country_id
+        ORDER BY co.country, ci.city
+        ]]>
+	</select>
+
+	<select id="findCustomerDetailById" parameterType="int"
+		resultType="com.example.springtest.dto.CustomerDetail">
+    <![CDATA[
+    SELECT
+      c.customer_id AS customerId,
+      c.first_name AS firstName,
+      c.last_name AS lastName,
+      c.email AS email,
+      c.active AS active,
+      a.address AS address,
+      a.district AS district,
+      ci.city AS city,
+      co.country AS country,
+      a.postal_code AS postalCode,
+      a.phone AS phone,
+      c.store_id AS storeId
+    FROM sakila.customer c
+    JOIN sakila.address a ON c.address_id = a.address_id
+    JOIN sakila.city ci ON a.city_id = ci.city_id
+    JOIN sakila.country co ON ci.country_id = co.country_id
+    WHERE c.customer_id = #{customerId}
+    ]]>
+	</select>
+
+	<select id="searchCustomers"
+		resultType="com.example.springtest.dto.CustomerSummary">
+
+		SELECT
+		c.customer_id AS customerId,
+		c.first_name AS firstName,
+		c.last_name AS lastName,
+		c.email AS email,
+		c.active AS active,
+		ci.city AS
+		city,
+		co.country AS country
+
+		FROM sakila.customer c
+		JOIN sakila.address a
+		ON c.address_id = a.address_id
+		JOIN sakila.city ci ON a.city_id =
+		ci.city_id
+		JOIN sakila.country co ON ci.country_id = co.country_id
+
+		<where>
+
+			<if test="lastName != null and lastName != ''">
+				AND c.last_name LIKE CONCAT('%', #{lastName}, '%')
+			</if>
+
+			<if test="firstName != null and firstName != ''">
+				AND c.first_name LIKE CONCAT('%', #{firstName}, '%')
+			</if>
+
+			<if test="email != null and email != ''">
+				AND c.email LIKE CONCAT('%', #{email}, '%')
+			</if>
+
+			<if test="active != null">
+				AND c.active = #{active}
+			</if>
+
+			<if test="country != null and country != ''">
+				AND co.country = #{country}
+			</if>
+
+		</where>
+
+		ORDER BY c.customer_id
+
+	</select>
+
+	<update id="updateCustomer"
+		parameterType="com.example.springtest.form.CustomerEditForm">
+    <![CDATA[
+    UPDATE sakila.customer
+    SET
+      first_name = #{firstName},
+      last_name = #{lastName},
+      email = #{email}
+    WHERE customer_id = #{customerId}
+    ]]>
+	</update>
+
+	<update id="deactivateCustomer" parameterType="int">
+    <![CDATA[
+    UPDATE sakila.customer
+    SET active = 0
+    WHERE customer_id = #{customerId}
+    ]]>
+	</update>
+
+	<insert id="createAddress"
+        parameterType="com.example.springtest.param.AddressInsertParam"
+        useGeneratedKeys="true"
+        keyProperty="addressId">
+    <![CDATA[
+    INSERT INTO sakila.address
+      (address, address2, district, city_id, postal_code, phone, location, last_update)
+    VALUES
+      (#{address}, NULL, #{district}, #{cityId}, #{postalCode}, #{phone},
+       ST_GeomFromText('POINT(0 0)'), NOW())
+    ]]>
+</insert>
+
+<insert id="createCustomer"
+        parameterType="com.example.springtest.param.CustomerInsertParam"
+        useGeneratedKeys="true"
+        keyProperty="customerId">
+    <![CDATA[
+    INSERT INTO sakila.customer
+      (store_id, first_name, last_name, email, address_id, active, create_date, last_update)
+    VALUES
+      (#{storeId}, #{firstName}, #{lastName}, #{email}, #{addressId}, #{active}, NOW(), NOW())
+    ]]>
+</insert>
+</mapper>
