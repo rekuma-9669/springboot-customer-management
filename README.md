@@ -139,15 +139,6 @@ docker compose up -d --build
 ---
 
 # アクセスURL
-
-### Eclipse起動
-
-```
-http://localhost:8080/search
-```
-
-### Docker起動
-
 ```
 http://localhost:8081/search
 ```
