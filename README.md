@@ -140,7 +140,7 @@ docker compose up -d --build
 
 # アクセスURL
 ```
-http://localhost:8081/search
+http://localhost:8080/search
 ```
 
 ---
