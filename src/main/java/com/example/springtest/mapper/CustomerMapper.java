@@ -3,6 +3,7 @@ package com.example.springtest.mapper;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import com.example.springtest.dto.CityOption;
 import com.example.springtest.dto.CustomerDetail;
@@ -48,12 +49,22 @@ public interface CustomerMapper {
      */
 
     List<CustomerSummary> searchCustomers(
-    	    String lastName,
-    	    String firstName,
-    	    String email,
-    	    Integer active,
-    	    String country
-    	);
+            @Param("lastName") String lastName,
+            @Param("firstName") String firstName,
+            @Param("email") String email,
+            @Param("active") Integer active,
+            @Param("country") String country,
+            @Param("offset") int offset,
+            @Param("limit") int limit
+    );
+
+    int countCustomers(
+            @Param("lastName") String lastName,
+            @Param("firstName") String firstName,
+            @Param("email") String email,
+            @Param("active") Integer active,
+            @Param("country") String country
+    );
 
     /**
      * 顧客IDをもとに顧客詳細を取得する。

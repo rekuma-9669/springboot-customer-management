@@ -52,50 +52,70 @@
 
 	<select id="searchCustomers"
 		resultType="com.example.springtest.dto.CustomerSummary">
-
-		SELECT
-		c.customer_id AS customerId,
-		c.first_name AS firstName,
-		c.last_name AS lastName,
-		c.email AS email,
-		c.active AS active,
-		ci.city AS
-		city,
-		co.country AS country
-
-		FROM sakila.customer c
-		JOIN sakila.address a
-		ON c.address_id = a.address_id
-		JOIN sakila.city ci ON a.city_id =
-		ci.city_id
-		JOIN sakila.country co ON ci.country_id = co.country_id
+    <![CDATA[
+    SELECT
+      c.customer_id AS customerId,
+      c.first_name AS firstName,
+      c.last_name AS lastName,
+      c.email AS email,
+      c.active AS active,
+      co.country AS country
+    FROM sakila.customer c
+    JOIN sakila.address a ON c.address_id = a.address_id
+    JOIN sakila.city ci ON a.city_id = ci.city_id
+    JOIN sakila.country co ON ci.country_id = co.country_id
+    ]]>
 
 		<where>
-
 			<if test="lastName != null and lastName != ''">
 				AND c.last_name LIKE CONCAT('%', #{lastName}, '%')
 			</if>
-
 			<if test="firstName != null and firstName != ''">
 				AND c.first_name LIKE CONCAT('%', #{firstName}, '%')
 			</if>
-
 			<if test="email != null and email != ''">
 				AND c.email LIKE CONCAT('%', #{email}, '%')
 			</if>
-
 			<if test="active != null">
 				AND c.active = #{active}
 			</if>
-
 			<if test="country != null and country != ''">
 				AND co.country = #{country}
 			</if>
-
 		</where>
 
-		ORDER BY c.customer_id
+    <![CDATA[
+    ORDER BY c.customer_id
+    LIMIT #{limit} OFFSET #{offset}
+    ]]>
+	</select>
 
+	<select id="countCustomers" resultType="int">
+    <![CDATA[
+    SELECT COUNT(*)
+    FROM sakila.customer c
+    JOIN sakila.address a ON c.address_id = a.address_id
+    JOIN sakila.city ci ON a.city_id = ci.city_id
+    JOIN sakila.country co ON ci.country_id = co.country_id
+    ]]>
+
+		<where>
+			<if test="lastName != null and lastName != ''">
+				AND c.last_name LIKE CONCAT('%', #{lastName}, '%')
+			</if>
+			<if test="firstName != null and firstName != ''">
+				AND c.first_name LIKE CONCAT('%', #{firstName}, '%')
+			</if>
+			<if test="email != null and email != ''">
+				AND c.email LIKE CONCAT('%', #{email}, '%')
+			</if>
+			<if test="active != null">
+				AND c.active = #{active}
+			</if>
+			<if test="country != null and country != ''">
+				AND co.country = #{country}
+			</if>
+		</where>
 	</select>
 
 	<update id="updateCustomer"
@@ -119,9 +139,8 @@
 	</update>
 
 	<insert id="createAddress"
-        parameterType="com.example.springtest.param.AddressInsertParam"
-        useGeneratedKeys="true"
-        keyProperty="addressId">
+		parameterType="com.example.springtest.param.AddressInsertParam"
+		useGeneratedKeys="true" keyProperty="addressId">
     <![CDATA[
     INSERT INTO sakila.address
       (address, address2, district, city_id, postal_code, phone, location, last_update)
@@ -129,17 +148,16 @@
       (#{address}, NULL, #{district}, #{cityId}, #{postalCode}, #{phone},
        ST_GeomFromText('POINT(0 0)'), NOW())
     ]]>
-</insert>
+	</insert>
 
-<insert id="createCustomer"
-        parameterType="com.example.springtest.param.CustomerInsertParam"
-        useGeneratedKeys="true"
-        keyProperty="customerId">
+	<insert id="createCustomer"
+		parameterType="com.example.springtest.param.CustomerInsertParam"
+		useGeneratedKeys="true" keyProperty="customerId">
     <![CDATA[
     INSERT INTO sakila.customer
       (store_id, first_name, last_name, email, address_id, active, create_date, last_update)
     VALUES
       (#{storeId}, #{firstName}, #{lastName}, #{email}, #{addressId}, #{active}, NOW(), NOW())
     ]]>
-</insert>
+	</insert>
 </mapper>

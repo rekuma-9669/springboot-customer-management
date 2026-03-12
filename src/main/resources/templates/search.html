@@ -98,6 +98,45 @@
         </table>
     </div>
 
+    <div class="d-flex justify-content-between align-items-center mt-3">
+    <div>
+        <span class="me-3">
+            検索結果: <span th:text="${totalCount}"></span>件
+        </span>
+        <span>
+            ページ: <span th:text="${currentPage}"></span> / <span th:text="${totalPages}"></span>
+        </span>
+    </div>
+
+    <div class="d-flex gap-2">
+        <a class="btn btn-outline-secondary"
+           th:if="${hasPrevious}"
+           th:href="@{/search(
+                lastName=${qLastName},
+                firstName=${qFirstName},
+                email=${qEmail},
+                active=${qActive},
+                country=${qCountry},
+                page=${currentPage - 1}
+           )}">
+            ← 前へ
+        </a>
+
+        <a class="btn btn-outline-primary"
+           th:if="${hasNext}"
+           th:href="@{/search(
+                lastName=${qLastName},
+                firstName=${qFirstName},
+                email=${qEmail},
+                active=${qActive},
+                country=${qCountry},
+                page=${currentPage + 1}
+           )}">
+            次へ →
+        </a>
+    </div>
+</div>
+
 </div>
 </body>
 </html>

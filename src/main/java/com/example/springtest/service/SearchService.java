@@ -41,9 +41,26 @@ public class SearchService {
 	 * @throws SQLException 検索処理中にエラーが発生した場合
 	 */
 
-	public List<CustomerSummary> searchCustomers(String lastName, String firstName, String email, Integer active,
-			String country){
-		return customerMapper.searchCustomers(lastName, firstName, email, active, country);
+	public List<CustomerSummary> searchCustomers(
+	        String lastName,
+	        String firstName,
+	        String email,
+	        Integer active,
+	        String country,
+	        int offset,
+	        int limit
+	) {
+	    return customerMapper.searchCustomers(lastName, firstName, email, active, country, offset, limit);
+	}
+
+	public int countCustomers(
+	        String lastName,
+	        String firstName,
+	        String email,
+	        Integer active,
+	        String country
+	) {
+	    return customerMapper.countCustomers(lastName, firstName, email, active, country);
 	}
 
 	/**

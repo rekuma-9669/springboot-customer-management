@@ -61,11 +61,15 @@ public class SearchController {
             @RequestParam(required = false) String email,
             @RequestParam(required = false) String active,
             @RequestParam(required = false) String country,
+            @RequestParam(defaultValue = "1") int page,
             Model model
     ) throws SQLException {
 
         List<String> countries = List.of("Japan", "United States", "France", "Brazil");
         model.addAttribute("countries", countries);
+        int limit = 20;
+        int offset = (page - 1) * limit;
+
 
         Integer activeInt = (active == null || active.isBlank()) ? null : Integer.valueOf(active);
 
@@ -76,8 +80,18 @@ public class SearchController {
                 activeInt != null ||
                 (country != null && !country.isBlank());
 
+        int totalCount = hasAny
+                ? searchService.countCustomers(lastName, firstName, email, activeInt, country)
+                : 0;
+
+        int totalPages = (int) Math.ceil((double) totalCount / limit);
+
+        if (totalPages == 0) {
+            totalPages = 1;
+        }
+
         List<CustomerSummary> customers = hasAny
-                ? searchService.searchCustomers(lastName, firstName, email, activeInt, country)
+                ? searchService.searchCustomers(lastName, firstName, email, activeInt, country, offset, limit)
                 : List.of();
 
         model.addAttribute("customers", customers);
@@ -86,7 +100,11 @@ public class SearchController {
         model.addAttribute("qEmail", email);
         model.addAttribute("qActive", active);
         model.addAttribute("qCountry", country);
-
+        model.addAttribute("currentPage", page);
+        model.addAttribute("hasPrevious", page > 1);
+        model.addAttribute("totalCount", totalCount);
+        model.addAttribute("totalPages", totalPages);
+        model.addAttribute("hasNext", page < totalPages);
         return "search";
     }
 
