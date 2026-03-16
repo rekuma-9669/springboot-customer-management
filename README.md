@@ -1,198 +1,192 @@
-# Spring Boot Customer Management
+# Spring Boot 顧客管理アプリ
 
-Spring Boot / MyBatis / Thymeleaf を使用して作成した顧客管理Webアプリケーションです。
-Sakilaデータベースを使用し、顧客の検索・登録・編集・停止機能を実装しています。
+Spring Boot / MyBatis を使用した顧客管理アプリケーションです。
+顧客の検索・登録・編集・削除を行う基本的な CRUD 機能を実装しています。
 
-Docker を使用して MySQL 環境を構築しています。
+研修で学習した内容をもとに、実践的な Web アプリケーションとして作成しました。
 
 ---
 
-# Application Overview
+# 使用技術
 
-顧客情報を管理するためのWebアプリケーションです。
+| 技術          | 内容         |
+| ----------- | ---------- |
+| Java        | 17         |
+| Spring Boot | 3.x        |
+| MyBatis     | ORM        |
+| Thymeleaf   | テンプレートエンジン |
+| Bootstrap   | UI         |
+| MySQL       | データベース     |
+| Docker      | DB環境       |
+| Maven       | ビルドツール     |
+| JUnit       | テスト        |
 
-主な機能
+---
+
+# 主な機能
 
 * 顧客検索
 * 顧客登録
 * 顧客編集
-* 顧客停止
-* ページング
-* 検索結果件数表示
-* モーダルによる削除確認
+* 顧客削除
+* ページング機能
+* バリデーション
+* 削除確認ポップアップ
+* Controllerテスト（JUnit）
 
 ---
 
-# Tech Stack
+# 画面イメージ
 
-| Technology  | Description          |
-| ----------- | -------------------- |
-| Java        | 17                   |
-| Spring Boot | Web Framework        |
-| MyBatis     | ORM / SQL Mapper     |
-| Thymeleaf   | Template Engine      |
-| Bootstrap   | UI Framework         |
-| MySQL       | Database             |
-| Docker      | Database Environment |
-| Maven       | Build Tool           |
+## 顧客検索画面
+
+![検索画面](docs/search.png)
+
+顧客一覧表示と検索が可能です。
+ページング機能を実装しています。
 
 ---
 
-# Architecture
+## 顧客登録画面
 
-Layered architecture を意識して実装しています。
+![登録画面](docs/create.png)
 
-Controller
-↓
-Service
-↓
-Mapper (MyBatis)
-↓
-Database (MySQL)
+新規顧客を登録できます。
+入力値バリデーションを実装しています。
 
 ---
 
-# Features
+## 顧客編集画面
 
-## Customer Search
-
-顧客情報を条件指定して検索できます。
-
-検索条件
-
-* 姓
-* 名
-* Email
-* 有効状態
-* 国
-
-検索結果はページング表示されます。
-
----
-
-## Customer Detail
-
-顧客の詳細情報を確認できます。
-
-表示情報
-
-* 顧客ID
-* 氏名
-* Email
-* 有効状態
-* 住所
-* 電話番号
-* 店舗
-
----
-
-## Customer Create
-
-顧客を新規登録できます。
-
-入力項目
-
-* 姓
-* 名
-* Email
-* 有効状態
-* 住所
-* 地区
-* 都市
-* 郵便番号
-* 電話番号
-* 店舗
-
-バリデーションを実装しています。
-
----
-
-## Customer Update
+![編集画面](docs/detail.png)
 
 顧客情報を編集できます。
 
 ---
 
-## Customer Deactivate
+# ディレクトリ構成
 
-顧客を停止状態に変更できます。
-
-削除確認には **モーダルウィンドウ** を使用しています。
-
----
-
-# Screenshots
-
-## Search Page
-
-![search](docs/search.png)
+```
+src
+ ├─ controller
+ ├─ service
+ ├─ mapper
+ ├─ dto
+ ├─ entity
+ └─ templates
+```
 
 ---
 
-## Customer Detail
+# 環境構築
 
-![detail](docs/detail.png)
+## 前提
 
----
+以下がインストールされていること
 
-## Customer Create
-
-![create](docs/create.png)
-
----
-
-# Project Structure
-
-src/main/java
-
-controller
-service
-mapper
-dto
-form
-param
-
-src/main/resources
-
-templates
-mapper
-static
+* Java 17
+* Maven
+* Docker
+* Docker Compose
 
 ---
 
-# Setup
+# リポジトリ取得
 
-## 1 Start MySQL container
+```bash
+git clone https://github.com/rekuma-9669/springboot-customer-management.git
+cd springboot-customer-management
+```
 
+---
+
+# MySQL 起動（Docker）
+
+```bash
 docker compose up -d
+```
+
+MySQL が起動します。
 
 ---
 
-## 2 Import Sakila database
+# アプリケーション起動
 
-docker exec -i springtest-mysql mysql -uroot -proot sakila < sakila-schema.sql
-docker exec -i springtest-mysql mysql -uroot -proot sakila < sakila-data.sql
-
----
-
-## 3 Start Application
-
+```bash
 mvn spring-boot:run
+```
 
 ---
 
-# Access
+# アクセス
 
+```
 http://localhost:8080
+```
 
 ---
 
-# Improvements
+# jarファイル作成
 
-今後の改善予定
+```bash
+mvn clean package
+```
 
-* ソート機能
+---
+
+# jar起動
+
+```bash
+java -jar target/springtest-0.0.1-SNAPSHOT.jar
+```
+
+---
+
+# テスト実行
+
+JUnitテストを実行します。
+
+```bash
+mvn test
+```
+
+---
+
+# DB設定
+
+DockerでMySQLを起動しています。
+
+| 項目       | 値         |
+| -------- | --------- |
+| host     | localhost |
+| port     | 3307      |
+| database | sakila    |
+| user     | root      |
+| password | root      |
+
+---
+
+# 実装ポイント
+
+* Spring Boot を使用した MVC 構成
+* MyBatis を使用した DB アクセス
+* Thymeleaf + Bootstrap による画面作成
+* ページング機能実装
+* バリデーション実装
+* 削除処理のポップアップ化
+* JUnit を使用した Controller テスト
+
+---
+
+# 今後の改善予定
+
 * ログイン機能
-* REST API対応
-* テストコード追加
+* 権限管理
+* API化
+* テストカバレッジ向上
 
+---
+
+# 作成者
+
+Ryuta
