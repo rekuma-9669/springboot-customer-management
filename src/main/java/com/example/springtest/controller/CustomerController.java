@@ -15,9 +15,7 @@ import com.example.springtest.service.CustomerService;
 
 /**
  * 顧客新規登録に関する画面遷移を処理するコントローラー。
- *
- * 新規登録画面の表示、確認画面への遷移、
- * および顧客登録確定処理を担当する。
+ * Git練習用にコメントを追加
  */
 
 @Controller
