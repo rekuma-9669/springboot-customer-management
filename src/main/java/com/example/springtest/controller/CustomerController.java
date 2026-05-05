@@ -18,6 +18,8 @@ import com.example.springtest.service.CustomerService;
  * Git練習用にコメントを追加
  */
 
+// Git練習 2周目
+
 @Controller
 public class CustomerController {
 
