@@ -12,5 +12,5 @@ public class CustomerInsertParam {
     private String lastName;
     private String email;
     private Integer addressId;
-    private String active;
+    private Integer active;
 }
