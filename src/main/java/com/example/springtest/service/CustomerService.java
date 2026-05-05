@@ -71,7 +71,7 @@ public class CustomerService {
 		customer.setLastName(form.getLastName());
 		customer.setEmail(form.getEmail());
 		customer.setAddressId(address.getAddressId());
-		customer.setActive(form.getActive());
+		customer.setActive(Integer.valueOf(form.getActive()));
 
 		customerMapper.createCustomer(customer);
 
