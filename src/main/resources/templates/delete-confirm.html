@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>顧客の削除確認</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body class="bg-light">
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-8">
+
+      <div class="card shadow-sm border-danger">
+        <div class="card-header bg-danger text-white">
+          <h4 class="mb-0">削除（停止）確認</h4>
+        </div>
+
+        <div class="card-body">
+
+          <div class="alert alert-danger" role="alert">
+            この顧客を <strong>停止（active=0）</strong> にします。<br>
+            本当に実行しますか？
+          </div>
+
+          <!-- 表示用（CustomerDetail が model に入ってる想定） -->
+          <dl class="row mb-0">
+            <dt class="col-sm-4">顧客ID</dt>
+            <dd class="col-sm-8" th:text="${detail.customerId}"></dd>
+
+            <dt class="col-sm-4">氏名</dt>
+            <dd class="col-sm-8">
+              <span th:text="${detail.firstName}"></span>
+              <span th:text="${detail.lastName}"></span>
+            </dd>
+
+            <dt class="col-sm-4">Email</dt>
+            <dd class="col-sm-8" th:text="${detail.email}"></dd>
+
+            <dt class="col-sm-4">現在の状態</dt>
+            <dd class="col-sm-8">
+              <span th:if="${detail.active == 1}" class="badge bg-success">登録中</span>
+              <span th:if="${detail.active != 1}" class="badge bg-secondary">停止</span>
+            </dd>
+          </dl>
+
+          <hr class="my-4">
+
+          <div class="d-flex justify-content-between">
+            <!-- キャンセル -->
+            <a class="btn btn-outline-secondary"
+               th:href="@{/customers/{id}(id=${detail.customerId})}">
+              ← 詳細へ戻る
+            </a>
+
+            <!-- 実行（POST推奨） -->
+            <form th:action="@{/customers/{id}/delete(id=${detail.customerId})}" method="post" class="m-0">
+              <button type="submit" class="btn btn-danger">
+                削除（停止）する
+              </button>
+            </form>
+          </div>
+
+        </div>
+      </div>
+
+      <p class="text-muted small mt-3 mb-0">
+        ※物理削除ではなく、active を 0 にする方式（ソフトデリート）を想定
+      </p>
+
+    </div>
+  </div>
+</div>
+</body>
+</html>
